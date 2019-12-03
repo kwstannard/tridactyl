@@ -90,6 +90,7 @@ import * as Native from "@src/lib/native"
 import * as TTS from "@src/lib/text_to_speech"
 import * as excmd_parser from "@src/parsers/exmode"
 import * as escape from "@src/lib/escape"
+import { Readability } from "readability"
 
 /**
  * This is used to drive some excmd handling in `composite`.
@@ -1472,6 +1473,18 @@ export async function credits() {
     tabopen(creditspage)
 }
 
+/** Opens the current page in Firefox's reader mode.
+ * You currently cannot use Tridactyl while in reader mode.
+ */
+//#background
+export async function reader() {
+    document.body.prepend("HELLO WORLD")
+    console.log("goodbye moon")
+    console.log(Readability)
+    console.log(CSS)
+    return 1
+}
+
 /**
  * Cover the current page in an overlay to prevent clicking on links with the mouse to force yourself to use hint mode. Get rid of it by reloading the page.
  *
@@ -1787,21 +1800,6 @@ export async function zoom(level = 0, rel = "false") {
         if (level < 0.3) level = 0.3
     }
     browser.tabs.setZoom(level)
-}
-
-/** Opens the current page in Firefox's reader mode.
- * You currently cannot use Tridactyl while in reader mode.
- */
-//#background
-export async function reader() {
-    if (await firefoxVersionAtLeast(58)) {
-        const aTab = await activeTab()
-        if (aTab.isArticle) {
-            browser.tabs.toggleReaderMode()
-        } // else {
-        //  // once a statusbar exists an error can be displayed there
-        // }
-    }
 }
 
 /** @hidden **/
